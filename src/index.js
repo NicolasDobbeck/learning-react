@@ -1,4 +1,5 @@
 import React from 'react';
+/*O react não precisa estar na pagina inteira*/
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
