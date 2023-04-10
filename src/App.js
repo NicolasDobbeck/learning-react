@@ -3,64 +3,53 @@ import { Component } from 'react';
 
 class App extends Component {
   state = {
-    counter: 0,
-    posts: [
-      {
-        id: 1,
-        title: 'The title1',
-        body: 'The body1'
-      },
-      {
-        id: 2,
-        title: 'The title2',
-        body: 'The body2'
-      },
-      {
-        id: 3,
-        title: 'The title3',
-        body: 'The body3'
-      }
-    ]
+    posts: []
   };
 
-  timeoutUpdate = null;
+  //Metodos de ciclo de vida
 
   //default react, não tem arow(=>) function
   componentDidMount() {
-    this.handleTimeOut();
+    this.loadPosts();
   }
 
-  //default react, não tem arow(=>) function
-  componentDidUpdate() {
-    this.handleTimeOut();
+  loadPosts = async () => {
+    const postsResponse = fetch('https://jsonplaceholder.typicode.com/posts')
+
+    const [posts] = await Promise.all([postsResponse]);
+
+    const postsJson = await posts.json();
+
+    this.setState({ posts: postsJson })
   }
 
-  componentWillUnmount() {
-    clearTimeout(this.timeoutUpdate)
-  }
+  // //default react, não tem arow(=>) function
+  // componentDidUpdate() {
 
-  handleTimeOut = () => {
-    const { posts, counter } = this.state;
-    posts[0].title = 'The title change'
-    this.timeoutUpdate = setTimeout(() => {
-      this.setState({ posts, counter: counter + 1 })
-    }, 1000);
-  }
+  // }
 
-  //default react, não tem arow(=>) function
+  // componentWillUnmount() {
+
+  // }
+
+  //default react, não tem arow (=>) function
   render() {
-    const { posts, counter } = this.state;
+    const { posts } = this.state;
 
     return (
-      <div className="App">
-        <h1>{counter}</h1>
-        {posts.map(post => (
-          <div key={post.id} >
-            <h1>{post.title}</h1>
-            <p>{post.body}</p>
-          </div>
-        ))}
-      </div>
+      <section className='container'>
+        <div className="posts">
+          {posts.map(post => (
+            <div className='post'>
+              <div key={post.id} className="post-content" >
+                <h1>{post.title}</h1>
+                <p>{post.body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
     );
   }
 }
